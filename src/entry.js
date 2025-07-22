@@ -6,4 +6,5 @@ import weatherAppDOM from './dom'
 const weather = weatherData()
 const weatherDOM = weatherAppDOM()
 
-weatherDOM.displayCurrentWeather()
+weatherDOM.createCurrentWeatherDOM()
+weatherDOM.displayCurrentWeatherInfo()

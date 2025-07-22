@@ -26,35 +26,20 @@ function weatherData() {
     async function processCurrentWeatherData() {
         try {
             let weatherData = await getWeatherData('Kowloon Bay')
-            console.log(weatherData)
             return {
-                address: weatherData.resolvedAddress,
+                currentAddress: weatherData.resolvedAddress,
                 currentTemp: weatherData.currentConditions.temp,
-                condition: weatherData.currentConditions.conditions,
-                tempHigh: weatherData.days[0].tempmax,
-                tempLow: weatherData.days[0].tempmin,
+                currentCondition: weatherData.currentConditions.conditions,
+                currentTempHigh: weatherData.days[0].tempmax,
+                currentTempLow: weatherData.days[0].tempmin,
             }
         } catch (error) {
             console.error(error)
         }
     }
 
-    async function processFutureWeatherData() {
-        const weatherDataJSON = await getWeatherData()
-        //An array of all entries for hourly forecast data that is ahead of current time
-        //Will show time, icon, and temperature for simplicity
-        const currentTime = weatherDataJSON.currentConditions.datetime
-        const hourlyDataArr = weatherDataJSON.days[0].hours.filter(
-            (hour) => hour.datetime > currentTime
-        )
-        //An array of 5 entries ahead of current day
-        //Will just show date, icon, temp max and min
-        const dailyDataArr = weatherDataJSON.days.slice(1, 6)
-    }
-
     return {
         getWeatherData,
         processCurrentWeatherData,
-        processFutureWeatherData,
     }
 }
