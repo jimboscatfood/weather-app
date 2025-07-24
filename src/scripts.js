@@ -23,9 +23,10 @@ function weatherData() {
 
     //Data from getWeatherData() function is in JSON format
     //so a function is required to extract and process the data
-    async function processCurrentWeatherData() {
+    async function processCurrentWeatherData(location) {
         try {
-            let weatherData = await getWeatherData('Kowloon Bay')
+            let weatherData = await getWeatherData(location)
+            // console.log(weatherData)
             return {
                 currentAddress: weatherData.resolvedAddress,
                 currentTemp: weatherData.currentConditions.temp,

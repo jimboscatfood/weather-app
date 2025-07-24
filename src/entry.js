@@ -1,10 +1,5 @@
 //entry file
 
-import weatherData from './scripts'
-import weatherAppDOM from './dom'
+import eventHandler from './handler'
 
-const weather = weatherData()
-const weatherDOM = weatherAppDOM()
-
-weatherDOM.createCurrentWeatherDOM()
-weatherDOM.displayCurrentWeatherInfo()
+eventHandler()

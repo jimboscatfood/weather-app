@@ -36,10 +36,10 @@ function weatherAppDOM() {
         currentWeatherDiv.append(address, temp, condition, maxTemp, minTemp)
     }
 
-    async function displayCurrentWeatherInfo() {
+    async function displayCurrentWeatherInfo(location) {
         let currentWeather
         try {
-            currentWeather = await weather.processCurrentWeatherData()
+            currentWeather = await weather.processCurrentWeatherData(location)
             console.log(currentWeather)
             const allCurrentP = document.querySelectorAll(
                 'div.current-weather p'
