@@ -23,17 +23,52 @@ function weatherData() {
 
     //Data from getWeatherData() function is in JSON format
     //so a function is required to extract and process the data
-    async function processCurrentWeatherData(location) {
+    async function processWeatherData(location) {
         try {
             let weatherData = await getWeatherData(location)
-            // console.log(weatherData)
-            return {
+            console.log(weatherData)
+
+            const current = {
                 currentAddress: weatherData.resolvedAddress,
                 currentTemp: weatherData.currentConditions.temp,
                 currentCondition: weatherData.currentConditions.conditions,
                 currentTempHigh: weatherData.days[0].tempmax,
                 currentTempLow: weatherData.days[0].tempmin,
+                currentIcon: weatherData.currentConditions.icon,
             }
+
+            const hourlyData = weatherData.days[0].hours.filter(
+                (hourDataObj) =>
+                    hourDataObj.datetime >
+                    weatherData.currentConditions.datetime
+            )
+
+            const hourly = {
+                hourlyTime: hourlyData.map((arr) => arr.datetime),
+                hourlyIcon: hourlyData.map((arr) => arr.icon),
+                hourlyTemp: hourlyData.map((arr) => arr.temp),
+            }
+
+            const dailyData = weatherData.days.slice(1, 6)
+            const days = [
+                'Sunday',
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+            ]
+
+            const daily = {
+                dailyDate: dailyData.map(
+                    (arr) => days[new Date(arr.datetime).getDay()]
+                ),
+                dailyIcon: dailyData.map((arr) => arr.icon),
+                dailyTempMax: dailyData.map((arr) => arr.tempmax),
+                dailyTempMin: dailyData.map((arr) => arr.tempmin),
+            }
+            return { current, hourly, daily }
         } catch (error) {
             console.error(error)
         }
@@ -41,6 +76,6 @@ function weatherData() {
 
     return {
         getWeatherData,
-        processCurrentWeatherData,
+        processWeatherData,
     }
 }

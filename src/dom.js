@@ -17,6 +17,7 @@ function weatherAppDOM() {
     const hourlyWeatherDiv = document.querySelector('div.hourly-weather')
     const weeklyWeatherDiv = document.querySelector('div.weekly-weather')
 
+    //for current weather, we know what info to know so we first create the DOM element, then display the data
     function createCurrentWeatherDOM() {
         const address = document.createElement('p')
         address.id = 'current-address'
@@ -36,24 +37,76 @@ function weatherAppDOM() {
         currentWeatherDiv.append(address, temp, condition, maxTemp, minTemp)
     }
 
-    async function displayCurrentWeatherInfo(location) {
-        let currentWeather
+    //It is unknown how many data container to create so need to see how many hours of data we get first
+    async function createHourlyWeatherDOM(location) {
+        let processedWeatherData
         try {
-            currentWeather = await weather.processCurrentWeatherData(location)
-            console.log(currentWeather)
-            const allCurrentP = document.querySelectorAll(
+            processedWeatherData = await weather.processWeatherData(location)
+            const hourlyTimeArr = processedWeatherData.hourly.hourlyTime
+            const hourlyIconArr = processedWeatherData.hourly.hourlyIcon
+            const hourlyTempArr = processedWeatherData.hourly.hourlyTemp
+            const dataArrLength = hourlyTimeArr.length
+
+            for (let i = 0; i < dataArrLength; i++) {
+                const infoBox = document.createElement('div')
+                infoBox.setAttribute('class', 'hourly-info')
+
+                const time = document.createElement('p')
+                time.textContent += hourlyTimeArr[i]
+
+                const { default: iconUrl } = await import(
+                    `./assets/WeatherIcons/PNG/1st Set - Color/${hourlyIconArr[i]}.png`
+                )
+                const iconBox = document.createElement('p')
+                const icon = document.createElement('img')
+                iconBox.appendChild(icon)
+                icon.src = iconUrl
+
+                const temp = document.createElement('p')
+                temp.textContent += hourlyTempArr[i]
+
+                infoBox.append(time, iconBox, temp)
+                hourlyWeatherDiv.appendChild(infoBox)
+            }
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
+    async function displayWeatherInfo(location) {
+        let processedWeatherData
+        try {
+            processedWeatherData = await weather.processWeatherData(location)
+            // console.log(currentWeather)
+            const allCurrent = document.querySelectorAll(
                 'div.current-weather p'
             )
-            allCurrentP.forEach((p, index) => {
-                p.textContent = Object.values(currentWeather)[index]
+            allCurrent.forEach((p, index) => {
+                p.textContent += Object.values(processedWeatherData.current)[
+                    index
+                ]
             })
         } catch (error) {
             console.error(error)
         }
     }
 
+    function clearPage() {
+        const allCurrentInfo = currentWeatherDiv.querySelectorAll('p')
+        const allHourlyInfo = hourlyWeatherDiv.querySelectorAll('p')
+
+        allCurrentInfo.forEach((p) => {
+            p.textContent = ''
+        })
+        allHourlyInfo.forEach((p) => {
+            p.textContent = ''
+        })
+    }
+
     return {
         createCurrentWeatherDOM,
-        displayCurrentWeatherInfo,
+        displayWeatherInfo,
+        createHourlyWeatherDOM,
+        clearPage,
     }
 }
