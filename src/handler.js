@@ -16,6 +16,6 @@ function eventHandler() {
 
         weatherDOM.clearPage()
         weatherDOM.displayWeatherInfo(location)
-        weatherDOM.createHourlyWeatherDOM(location)
+        weatherDOM.createWeatherDOM(location)
     })
 }

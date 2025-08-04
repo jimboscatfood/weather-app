@@ -15,7 +15,7 @@ function weatherAppDOM() {
     const weather = weatherData()
     const currentWeatherDiv = document.querySelector('div.current-weather')
     const hourlyWeatherDiv = document.querySelector('div.hourly-weather')
-    const weeklyWeatherDiv = document.querySelector('div.weekly-weather')
+    const daillyWeatherDiv = document.querySelector('div.daily-weather')
 
     //for current weather, we know what info to know so we first create the DOM element, then display the data
     function createCurrentWeatherDOM() {
@@ -38,16 +38,17 @@ function weatherAppDOM() {
     }
 
     //It is unknown how many data container to create so need to see how many hours of data we get first
-    async function createHourlyWeatherDOM(location) {
+    async function createWeatherDOM(location) {
         let processedWeatherData
         try {
             processedWeatherData = await weather.processWeatherData(location)
+            //hourly weather data
             const hourlyTimeArr = processedWeatherData.hourly.hourlyTime
             const hourlyIconArr = processedWeatherData.hourly.hourlyIcon
             const hourlyTempArr = processedWeatherData.hourly.hourlyTemp
-            const dataArrLength = hourlyTimeArr.length
+            const hourlyDataArrLength = hourlyTimeArr.length
 
-            for (let i = 0; i < dataArrLength; i++) {
+            for (let i = 0; i < hourlyDataArrLength; i++) {
                 const infoBox = document.createElement('div')
                 infoBox.setAttribute('class', 'hourly-info')
 
@@ -67,6 +68,38 @@ function weatherAppDOM() {
 
                 infoBox.append(time, iconBox, temp)
                 hourlyWeatherDiv.appendChild(infoBox)
+            }
+
+            //daily weather data
+            const dailyDateArr = processedWeatherData.daily.dailyDate
+            const dailyIconArr = processedWeatherData.daily.dailyIcon
+            const dailyTempMaxArr = processedWeatherData.daily.dailyTempMax
+            const dailyTempMinArr = processedWeatherData.daily.dailyTempMin
+            const dailyTimeArrLength = dailyDateArr.length
+
+            for (let j = 0; j < dailyTimeArrLength; j++) {
+                const infoBox = document.createElement('div')
+                infoBox.setAttribute('class', 'daily-info')
+
+                const date = document.createElement('p')
+                date.textContent += dailyDateArr[j]
+
+                const { default: iconUrl } = await import(
+                    `./assets/WeatherIcons/PNG/1st Set - Color/${dailyIconArr[j]}.png`
+                )
+                const iconBox = document.createElement('p')
+                const icon = document.createElement('img')
+                iconBox.appendChild(icon)
+                icon.src = iconUrl
+
+                const tempMax = document.createElement('p')
+                tempMax.textContent += dailyTempMaxArr[j]
+
+                const tempMin = document.createElement('p')
+                tempMin.textContent += dailyTempMinArr[j]
+
+                infoBox.append(date, iconBox, tempMax, tempMin)
+                daillyWeatherDiv.appendChild(infoBox)
             }
         } catch (error) {
             console.error(error)
@@ -94,6 +127,7 @@ function weatherAppDOM() {
     function clearPage() {
         const allCurrentInfo = currentWeatherDiv.querySelectorAll('p')
         const allHourlyInfo = hourlyWeatherDiv.querySelectorAll('p')
+        const allDailyInfo = daillyWeatherDiv.querySelectorAll('p')
 
         allCurrentInfo.forEach((p) => {
             p.textContent = ''
@@ -101,12 +135,15 @@ function weatherAppDOM() {
         allHourlyInfo.forEach((p) => {
             p.textContent = ''
         })
+        allDailyInfo.forEach((p) => {
+            p.textContent = ''
+        })
     }
 
     return {
         createCurrentWeatherDOM,
         displayWeatherInfo,
-        createHourlyWeatherDOM,
+        createWeatherDOM,
         clearPage,
     }
 }
