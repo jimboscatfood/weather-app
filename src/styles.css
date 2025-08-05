@@ -30,7 +30,6 @@
     grid-template: repeat(4, 1fr)/auto auto; 
 
     font-size: 2rem;
-    border:1px solid black;
     grid-column:1/2;
     grid-row:1/3;
 }

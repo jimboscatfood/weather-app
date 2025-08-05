@@ -16,6 +16,7 @@ function weatherAppDOM() {
     const currentWeatherDiv = document.querySelector('div.current-weather')
     const hourlyWeatherDiv = document.querySelector('div.hourly-weather')
     const daillyWeatherDiv = document.querySelector('div.daily-weather')
+    const loader = document.getElementById('loader')
 
     //for current weather, we know what info to know so we first create the DOM element, then display the data
     function createCurrentWeatherDOM() {
@@ -40,6 +41,7 @@ function weatherAppDOM() {
     //It is unknown how many data container to create so need to see how many hours of data we get first
     async function displayWeatherDOM(location) {
         let processedWeatherData
+        showLoader()
         try {
             processedWeatherData = await weather.processWeatherData(location)
 
@@ -114,6 +116,7 @@ function weatherAppDOM() {
         } catch (error) {
             // console.error(error)
         }
+        hiderLoader()
     }
 
     function clearPage() {
@@ -125,6 +128,14 @@ function weatherAppDOM() {
         hourlyWeatherDiv.textContent = ''
 
         daillyWeatherDiv.textContent = ''
+    }
+
+    function showLoader() {
+        loader.style.display = 'initial'
+    }
+
+    function hiderLoader() {
+        loader.style.display = 'none'
     }
 
     return {
