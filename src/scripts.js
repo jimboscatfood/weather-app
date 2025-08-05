@@ -29,7 +29,7 @@ function weatherData() {
     async function processWeatherData(location) {
         try {
             let weatherData = await getWeatherData(location)
-            // console.log(weatherData)
+            console.log(weatherData)
 
             const current = {
                 currentAddress: weatherData.resolvedAddress,

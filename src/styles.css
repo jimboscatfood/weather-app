@@ -1,0 +1,70 @@
+.loader {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    margin-left: -20px;
+    margin-top: -20px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.weather-app {
+    max-width: 500px;
+    display: grid;
+    grid-template: auto auto/ 500px 500px;
+}
+
+
+.current-weather {
+    display:grid;
+    text-align: center;
+    grid-template: repeat(4, 1fr)/auto auto; 
+
+    font-size: 2rem;
+    border:1px solid black;
+    grid-column:1/2;
+    grid-row:1/3;
+}
+
+#current-address, #current-temp, #current-condition {
+    grid-column:1/3;
+}
+
+.hourly-weather {
+    display:flex;
+    flex-direction: row;
+    max-width:100%;
+    overflow: scroll;
+}
+
+.hourly-weather div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px black solid;
+    min-width:100px;
+}
+
+.daily-weather {
+    display: flex;
+    flex-direction: column;
+    max-width:100%;
+}
+
+.daily-weather div {
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px black solid;
+    justify-content: space-evenly;
+    
+}

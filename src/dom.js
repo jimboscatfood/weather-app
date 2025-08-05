@@ -118,18 +118,13 @@ function weatherAppDOM() {
 
     function clearPage() {
         const allCurrentInfo = currentWeatherDiv.querySelectorAll('p')
-        const allHourlyInfo = hourlyWeatherDiv.querySelectorAll('p')
-        const allDailyInfo = daillyWeatherDiv.querySelectorAll('p')
 
         allCurrentInfo.forEach((p) => {
             p.textContent = ''
         })
-        allHourlyInfo.forEach((p) => {
-            p.textContent = ''
-        })
-        allDailyInfo.forEach((p) => {
-            p.textContent = ''
-        })
+        hourlyWeatherDiv.textContent = ''
+
+        daillyWeatherDiv.textContent = ''
     }
 
     return {
