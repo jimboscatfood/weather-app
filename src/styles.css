@@ -17,10 +17,38 @@
     100% { transform: rotate(360deg); }
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding-top:20px;
+}
+
+form {
+    font-size: 1.5rem;
+    display:flex;
+    align-items: center;
+    justify-content: space-evenly;
+    width:400px;
+}
+
+button {
+    height:1.5rem;
+    }
+
+input {
+    height:1.5rem;
+
+}
+
 .weather-app {
-    max-width: 500px;
+    max-width: fit-content;
     display: grid;
     grid-template: auto auto/ 500px 500px;
+    justify-content: center;
+    gap:5px;
+    margin-top:30px;
 }
 
 
@@ -43,6 +71,7 @@
     flex-direction: row;
     max-width:100%;
     overflow: scroll;
+    height:fit-content;
 }
 
 .hourly-weather div {

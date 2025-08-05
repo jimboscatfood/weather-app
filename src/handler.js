@@ -9,7 +9,6 @@ function eventHandler() {
 
     window.addEventListener('load', () => {
         hiderLoader()
-        weatherDOM.createCurrentWeatherDOM()
     })
 
     searchBtn.addEventListener('click', async (e) => {
@@ -19,6 +18,7 @@ function eventHandler() {
 
         weatherDOM.clearPage()
         await weatherDOM.displayWeatherDOM(location)
+
         hiderLoader()
     })
 

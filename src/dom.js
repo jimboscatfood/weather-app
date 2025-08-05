@@ -13,10 +13,10 @@ export default weatherAppDOM
 
 function weatherAppDOM() {
     const weather = weatherData()
+    const weatherAppContainer = document.querySelector('div.weather-app')
     const currentWeatherDiv = document.querySelector('div.current-weather')
     const hourlyWeatherDiv = document.querySelector('div.hourly-weather')
     const daillyWeatherDiv = document.querySelector('div.daily-weather')
-    const loader = document.getElementById('loader')
 
     //for current weather, we know what info to know so we first create the DOM element, then display the data
     function createCurrentWeatherDOM() {
@@ -25,15 +25,20 @@ function weatherAppDOM() {
 
         const temp = document.createElement('p')
         temp.id = 'current-temp'
+        temp.classList.add('temp')
 
         const condition = document.createElement('p')
         condition.id = 'current-condition'
 
         const maxTemp = document.createElement('p')
         maxTemp.id = 'current-max-temp'
+        maxTemp.textContent += 'High: '
+        maxTemp.classList.add('temp')
 
         const minTemp = document.createElement('p')
         minTemp.id = 'current-min-temp'
+        minTemp.textContent += 'Low: '
+        minTemp.classList.add('temp')
 
         currentWeatherDiv.append(address, temp, condition, maxTemp, minTemp)
     }
@@ -41,10 +46,14 @@ function weatherAppDOM() {
     //It is unknown how many data container to create so need to see how many hours of data we get first
     async function displayWeatherDOM(location) {
         let processedWeatherData
-        showLoader()
         try {
             processedWeatherData = await weather.processWeatherData(location)
 
+            if (!processedWeatherData) {
+                throw new Error()
+            }
+
+            createCurrentWeatherDOM()
             const allCurrent = document.querySelectorAll(
                 'div.current-weather p'
             )
@@ -77,6 +86,7 @@ function weatherAppDOM() {
 
                 const temp = document.createElement('p')
                 temp.textContent += hourlyTempArr[i]
+                temp.classList.add('temp')
 
                 infoBox.append(time, iconBox, temp)
                 hourlyWeatherDiv.appendChild(infoBox)
@@ -105,42 +115,49 @@ function weatherAppDOM() {
                 icon.src = iconUrl
 
                 const tempMax = document.createElement('p')
+                tempMax.classList.add('temp')
+                const high = document.createElement('span')
+                high.textContent += 'High: '
+                tempMax.appendChild(high)
                 tempMax.textContent += dailyTempMaxArr[j]
 
                 const tempMin = document.createElement('p')
+                tempMin.classList.add('temp')
+                const low = document.createElement('span')
+                low.textContent += 'Low: '
+                tempMin.appendChild(low)
                 tempMin.textContent += dailyTempMinArr[j]
 
                 infoBox.append(date, iconBox, tempMax, tempMin)
                 daillyWeatherDiv.appendChild(infoBox)
             }
+            weatherAppContainer.style.border = '1px solid black'
+            toggleTemp()
         } catch (error) {
             // console.error(error)
         }
-        hiderLoader()
     }
 
     function clearPage() {
-        const allCurrentInfo = currentWeatherDiv.querySelectorAll('p')
-
-        allCurrentInfo.forEach((p) => {
-            p.textContent = ''
-        })
+        weatherAppContainer.style.border = 'none'
+        currentWeatherDiv.textContent = ''
         hourlyWeatherDiv.textContent = ''
-
         daillyWeatherDiv.textContent = ''
     }
 
-    function showLoader() {
-        loader.style.display = 'initial'
-    }
-
-    function hiderLoader() {
-        loader.style.display = 'none'
+    function toggleTemp() {
+        const temp = document.querySelectorAll('.temp')
+        temp.forEach((p) => {
+            const unit = document.createElement('span')
+            unit.textContent += '°F'
+            p.appendChild(unit)
+        })
     }
 
     return {
         createCurrentWeatherDOM,
         displayWeatherDOM,
         clearPage,
+        toggleTemp,
     }
 }
