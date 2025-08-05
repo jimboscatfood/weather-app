@@ -15,7 +15,6 @@ function eventHandler() {
         e.preventDefault()
 
         weatherDOM.clearPage()
-        weatherDOM.displayWeatherInfo(location)
-        weatherDOM.createWeatherDOM(location)
+        weatherDOM.displayWeatherDOM(location)
     })
 }

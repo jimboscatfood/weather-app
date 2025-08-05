@@ -14,10 +14,13 @@ function weatherData() {
             { mode: 'cors' }
         )
             .then((response) => {
+                if (!response.ok) {
+                    alert('Invalid location. Please enter a valid location')
+                }
                 return response.json()
             })
             .catch((error) => {
-                console.error(error)
+                console.error('Fetch error:', error.message)
             })
     }
 
@@ -26,7 +29,7 @@ function weatherData() {
     async function processWeatherData(location) {
         try {
             let weatherData = await getWeatherData(location)
-            console.log(weatherData)
+            // console.log(weatherData)
 
             const current = {
                 currentAddress: weatherData.resolvedAddress,
@@ -70,7 +73,7 @@ function weatherData() {
             }
             return { current, hourly, daily }
         } catch (error) {
-            console.error(error)
+            // console.error(error)
         }
     }
 

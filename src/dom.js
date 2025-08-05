@@ -38,10 +38,20 @@ function weatherAppDOM() {
     }
 
     //It is unknown how many data container to create so need to see how many hours of data we get first
-    async function createWeatherDOM(location) {
+    async function displayWeatherDOM(location) {
         let processedWeatherData
         try {
             processedWeatherData = await weather.processWeatherData(location)
+
+            const allCurrent = document.querySelectorAll(
+                'div.current-weather p'
+            )
+            allCurrent.forEach((p, index) => {
+                p.textContent += Object.values(processedWeatherData.current)[
+                    index
+                ]
+            })
+
             //hourly weather data
             const hourlyTimeArr = processedWeatherData.hourly.hourlyTime
             const hourlyIconArr = processedWeatherData.hourly.hourlyIcon
@@ -102,25 +112,7 @@ function weatherAppDOM() {
                 daillyWeatherDiv.appendChild(infoBox)
             }
         } catch (error) {
-            console.error(error)
-        }
-    }
-
-    async function displayWeatherInfo(location) {
-        let processedWeatherData
-        try {
-            processedWeatherData = await weather.processWeatherData(location)
-            // console.log(currentWeather)
-            const allCurrent = document.querySelectorAll(
-                'div.current-weather p'
-            )
-            allCurrent.forEach((p, index) => {
-                p.textContent += Object.values(processedWeatherData.current)[
-                    index
-                ]
-            })
-        } catch (error) {
-            console.error(error)
+            // console.error(error)
         }
     }
 
@@ -142,8 +134,7 @@ function weatherAppDOM() {
 
     return {
         createCurrentWeatherDOM,
-        displayWeatherInfo,
-        createWeatherDOM,
+        displayWeatherDOM,
         clearPage,
     }
 }
